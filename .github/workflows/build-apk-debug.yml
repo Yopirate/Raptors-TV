@@ -9,24 +9,31 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # 1. Récupérer le code
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      # 2. Installer Flutter (version explicite et stable)
       - name: Install Flutter
         uses: subosito/flutter-action@v2
         with:
           flutter-version: '3.19.6'
           channel: stable
 
+      # 3. Régénérer un projet Android propre
+      # IMPORTANT : on force un nom de projet Dart valide
       - name: Recreate Android project
-        run: flutter create .
+        run: flutter create . --project-name raptors_tv
 
+      # 4. Installer les dépendances
       - name: Get dependencies
         run: flutter pub get
 
+      # 5. Construire l'APK DEBUG
       - name: Build DEBUG APK
         run: flutter build apk --debug
 
+      # 6. Publier l'APK comme artifact
       - name: Upload DEBUG APK
         uses: actions/upload-artifact@v4
         with:
